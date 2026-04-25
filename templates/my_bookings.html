@@ -22,7 +22,7 @@
             {% if booking.status == 'Active' %}
             <td style="color: var(--accent-green); font-weight: bold;">
                 Active <br>
-                <span class="timer" data-start="{{ booking.booking_time_iso }}">0h 0m 0s</span>
+                <span class="timer" data-start="{{ booking.booking_time_epoch }}">0h 0m 0s</span>
             </td>
             <td style="color: var(--accent-neon); font-family: monospace; font-size: 1.25em;" class="live-cost">
                 ₹0.000
