@@ -355,4 +355,57 @@ a:hover {
     font-size: 1rem !important;
     font-weight: bold;
     text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
+
+    /* Mobile Responsiveness Rules */
+@media screen and (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        padding: 15px;
+        gap: 10px;
+    }
+    
+    .navbar a {
+        margin: 5px 0 !important;
+        text-align: center;
+        width: 100%;
+        display: block;
+    }
+    
+    .navbar a:first-child {
+        justify-content: center;
+        margin-bottom: 15px !important;
+    }
+
+    .container {
+        padding: 0 10px;
+        margin: 15px auto;
+    }
+
+    .card {
+        padding: 20px 15px;
+        border-radius: 12px;
+    }
+
+    .dashboard-layout {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+        border-radius: 8px;
+    }
+    
+    h2 {
+        font-size: 1.6rem;
+    }
+    
+    .slot {
+        width: 100px !important;
+        height: 50px !important;
+    }
+}
+
 }
