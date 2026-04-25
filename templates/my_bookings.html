@@ -50,29 +50,19 @@
     function updateTimers() {
         document.querySelectorAll('.timer').forEach(el => {
             let startString = el.getAttribute('data-start');
-            if (!startString) return;
-
-            let diff = parseFloat(el.getAttribute('data-elapsed'));
-            el.setAttribute('data-elapsed', diff + 1);
+            // Check if we are using the new elapsed attribute instead
+            let elapsedStr = el.getAttribute('data-elapsed');
+            let diff = 0;
+            
+            if (elapsedStr) {
+                diff = parseFloat(elapsedStr);
+                el.setAttribute('data-elapsed', diff + 1);
+            } else {
+                return;
+            }
 
             if (diff < 0) diff = 0;
-            let h = Math.floor(diff / 3600);
-            let m = Math.floor((diff % 3600) / 60);
-            let s = diff % 60;
 
-            el.innerText = `${h}h ${m}m ${s}s`;
-
-            // Pricing update dynamically
-            let costInRupees = (diff / 3600) * 50;
-            let tr = el.closest('tr');
-            if (tr) {
-                let costTd = tr.querySelector('.live-cost');
-                if (costTd) {
-                    costTd.innerText = `₹${costInRupees.toFixed(4)}`;
-                }
-            }
-        });
-    }
     setInterval(updateTimers, 1000);
     updateTimers();
 </script>
