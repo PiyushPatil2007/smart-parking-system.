@@ -55,8 +55,8 @@ def register():
             flash('Registered successfully', 'success')
             return redirect(url_for('login'))
         except Exception as e:
-            flash('Username or email already exists.', 'danger')
-        finally:
+                flash(f'Database Error: {e}', 'danger')
+            finally:
             cur.close()
     return render_template('register.html')
 
