@@ -36,7 +36,11 @@
             {% else %}
             <td data-label="Status" style="color: var(--text-secondary);">Completed</td>
             <td data-label="Live Cost" style="color: var(--text-secondary);">-</td>
-            <td data-label="Action">-</td>
+            <td data-label="Action">
+                <a href="{{ url_for('download_receipt', booking_id=booking.id) }}" class="btn"
+                    style="padding: 5px 10px; font-size: 0.8em; color: var(--accent-neon); border-color: rgba(0, 240, 255, 0.3);">📄
+                    Receipt</a>
+            </td>
             {% endif %}
         </tr>
         {% else %}

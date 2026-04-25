@@ -4,6 +4,58 @@
 
 {% block content %}
 <h2>Admin Dashboard</h2>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="dashboard-layout" style="margin-bottom: 30px;">
+    <div class="stat-box"
+        style="flex: 1; background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), transparent); display: flex; flex-direction: column; justify-content: center;">
+        <h4 style="margin: 0 0 10px 0; color: var(--accent-neon);">Total Lifetime Revenue</h4>
+        <h1 style="margin: 0; font-size: 2.5rem; font-weight: 300; color: white;">₹{{ "%.2f"|format(total_revenue) }}
+        </h1>
+    </div>
+
+    <div class="card" style="flex: 2; padding: 20px;">
+        <h3 style="margin-top: 0; margin-bottom: 15px; font-size: 1.1rem; color: var(--text-secondary);">Revenue By
+            Vehicle Type</h3>
+        <canvas id="revenueChart" style="max-height: 200px; width: 100%;"></canvas>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const ctx = document.getElementById('revenueChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Car Revenue', 'Bike Revenue'],
+                datasets: [{
+                    data: [{{ car_revenue }}, {{ bike_revenue }}],
+            backgroundColor: [
+                'rgba(0, 240, 255, 0.7)',
+                'rgba(46, 204, 113, 0.7)'
+            ],
+            borderColor: [
+                'rgba(0, 240, 255, 1)',
+                'rgba(46, 204, 113, 1)'
+            ],
+            borderWidth: 1,
+            hoverOffset: 4
+        }]
+            },
+        options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'right',
+                labels: { color: '#94a3b8' }
+            }
+        }
+    }
+        });
+    });
+</script>
 <div class="card" style="margin-bottom: 30px;">
     <h3>All Slots Status</h3>
     <table>
