@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Smart Parking - Admin Dashboard{% endblock %}
+
+{% block content %}
+<h2>Admin Dashboard</h2>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="dashboard-layout" style="margin-bottom: 30px;">
+    <div class="stat-box"
+        style="flex: 1; background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), transparent); display: flex; flex-direction: column; justify-content: center;">
+        <h4 style="margin: 0 0 10px 0; color: var(--accent-neon);">Total Lifetime Revenue</h4>
+        <h1 style="margin: 0; font-size: 2.5rem; font-weight: 300; color: white;">₹{{ "%.2f"|format(total_revenue) }}
+        </h1>
+    </div>
+
+    <div class="card" style="flex: 2; padding: 20px;">
+        <h3 style="margin-top: 0; margin-bottom: 15px; font-size: 1.1rem; color: var(--text-secondary);">Revenue By
+            Vehicle Type</h3>
+        <canvas id="revenueChart" style="max-height: 200px; width: 100%;"></canvas>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const ctx = document.getElementById('revenueChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Car Revenue', 'Bike Revenue'],
+                datasets: [{
+                    data: [{{ car_revenue }}, {{ bike_revenue }}],
+            backgroundColor: [
+                'rgba(0, 240, 255, 0.7)',
+                'rgba(46, 204, 113, 0.7)'
+            ],
+            borderColor: [
+                'rgba(0, 240, 255, 1)',
+                'rgba(46, 204, 113, 1)'
+            ],
+            borderWidth: 1,
+            hoverOffset: 4
+        }]
+            },
+        options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'right',
+                labels: { color: '#94a3b8' }
+            }
+        }
+    }
+        });
+    });
+</script>
+<div class="card" style="margin-bottom: 30px;">
+    <h3>All Slots Status</h3>
+    <table>
+        <tr>
+            <th>Slot No.</th>
+            <th>Status</th>
+            <th>Vehicle Type</th>
+            <th>Action</th>
+        </tr>
+        {% for slot in slots %}
+        <tr>
+            <td data-label="Slot No.">{{ slot.slot_number }}</td>
+            <td data-label="Status"
+                style="font-weight: bold; color: {% if slot.status == 'Available' %}var(--accent-green){% else %}var(--accent-red){% endif %};">
+                {{ slot.status }}</td>
+            <td data-label="Vehicle Type">{{ slot.vehicle_type }}</td>
+            <td data-label="Action">
+                {% if slot.status == 'Occupied' %}
+                <form action="{{ url_for('admin_clear', slot_id=slot.id) }}" method="post" style="display:inline;">
+                    <button type="submit" class="btn"
+                        style="border-color: var(--accent-red); color: var(--accent-red); padding: 5px 10px;">Force
+                        Clear</button>
+                </form>
+                {% else %}
+                -
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<div class="card">
+    <h3>Active Bookings</h3>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>User</th>
+            <th>Slot</th>
+            <th>Vehicle</th>
+            <th>Status</th>
+        </tr>
+        {% for b in bookings if b.status == 'Active' %}
+        <tr>
+            <td data-label="ID">#{{ b.id }}</td>
+            <td data-label="User">{{ b.username }}</td>
+            <td data-label="Slot">{{ b.slot_number }}</td>
+            <td data-label="Vehicle">{{ b.vehicle_number }}</td>
+            <td data-label="Status" style="color: var(--accent-green); font-weight: bold;">Active</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="5" style="text-align: center;">No active bookings.</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

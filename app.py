@@ -150,7 +150,7 @@ def my_bookings():
             now_utc = datetime.now(timezone.utc).replace(tzinfo=None)
             elapsed = (now_utc - b['booking_time']).total_seconds()
             b['elapsed'] = int(elapsed) if elapsed > 0 else 0
-
+            
     cur.close()
     return render_template('my_bookings.html', bookings=bookings)
 
@@ -166,7 +166,9 @@ def checkout(booking_id):
         flash('Booking not found or inactive.', 'danger')
         return redirect(url_for('my_bookings'))
         
-    duration = (datetime.now() - booking['booking_time']).total_seconds() / 3600
+    from datetime import datetime, timezone
+    now_utc = datetime.now(timezone.utc).replace(tzinfo=None)
+    duration = (now_utc - booking['booking_time']).total_seconds() / 3600
     hours = max(1, int(duration + 0.99)) # Round up to nearest hour
     cost = hours * 50 # 50 rupees an hour
     
@@ -176,12 +178,18 @@ def checkout(booking_id):
 @login_required
 def pay(booking_id):
     cur = mysql.connection.cursor()
-    cur.execute("SELECT id, slot_id FROM bookings WHERE id = %s AND user_id = %s AND status = 'Active'", (booking_id, session['user_id']))
+    cur.execute("SELECT id, slot_id, booking_time FROM bookings WHERE id = %s AND user_id = %s AND status = 'Active'", (booking_id, session['user_id']))
     booking = cur.fetchone()
     
     if booking:
         try:
-            cur.execute("UPDATE bookings SET status = 'Completed', payment_status = 'Paid', exit_time = CURRENT_TIMESTAMP WHERE id = %s", [booking_id])
+            from datetime import datetime, timezone
+            now_utc = datetime.now(timezone.utc).replace(tzinfo=None)
+            duration = (now_utc - booking['booking_time']).total_seconds() / 3600
+            hours = max(1, int(duration + 0.99))
+            final_cost = hours * 50
+            
+            cur.execute("UPDATE bookings SET status = 'Completed', payment_status = 'Paid', exit_time = CURRENT_TIMESTAMP, total_cost = %s WHERE id = %s", [final_cost, booking_id])
             cur.execute("UPDATE parking_slots SET status = 'Available' WHERE id = %s", [booking['slot_id']])
             mysql.connection.commit()
             flash('Payment successful. Booking ended!', 'success')
@@ -218,8 +226,25 @@ def admin_dashboard():
     
     cur.execute("SELECT b.id, u.username, ps.slot_number, b.vehicle_number, b.status FROM bookings b JOIN users u ON b.user_id = u.id JOIN parking_slots ps ON b.slot_id = ps.id ORDER BY b.booking_time DESC")
     bookings = cur.fetchall()
+    
+    # --- New Analytics Queries ---
+    cur.execute("SELECT SUM(total_cost) AS total_revenue FROM bookings WHERE status = 'Completed'")
+    revenue_data = cur.fetchone()
+    total_revenue = revenue_data['total_revenue'] if revenue_data and revenue_data['total_revenue'] else 0.0
+    
+    cur.execute("SELECT ps.vehicle_type, SUM(b.total_cost) AS rev FROM bookings b JOIN parking_slots ps ON b.slot_id = ps.id WHERE b.status = 'Completed' GROUP BY ps.vehicle_type")
+    rev_by_type = cur.fetchall()
+    # Safely handle Decimal extraction
+    car_revenue = 0.0
+    bike_revenue = 0.0
+    for item in rev_by_type:
+        if item['vehicle_type'] == 'Car':
+            car_revenue = float(item['rev'] or 0)
+        elif item['vehicle_type'] == 'Bike':
+            bike_revenue = float(item['rev'] or 0)
+            
     cur.close()
-    return render_template('admin_dashboard.html', slots=slots, bookings=bookings)
+    return render_template('admin_dashboard.html', slots=slots, bookings=bookings, total_revenue=total_revenue, car_revenue=car_revenue, bike_revenue=bike_revenue)
 
 @app.route('/admin_clear/<int:slot_id>', methods=['POST'])
 @admin_required
