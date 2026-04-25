@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Smart Parking - Home{% endblock %}
+
+{% block content %}
+<div style="text-align: center; margin-top: 50px;">
+    <h1>Welcome to Smart Parking Management System</h1>
+    <p>Find and book a parking slot easily.</p>
+    <br>
+    <a href="{{ url_for('register') }}" class="btn" style="font-size: 1.2em; padding: 15px 30px;">Get Started</a>
+</div>
+{% endblock %}

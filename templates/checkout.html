@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Smart Parking - Checkout{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 500px; margin: 40px auto; text-align: center;">
+    <h2>Checkout / Receipt</h2>
+    <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+
+    <p><strong>Booking ID:</strong> #{{ booking.id }}</p>
+    <p><strong>Slot:</strong> {{ booking.slot_number }}</p>
+    <p><strong>Vehicle:</strong> {{ booking.vehicle_number }}</p>
+
+    <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+
+    <p><strong>Total Duration Parked:</strong> {{ hours }} hour(s)</p>
+    <p><strong>Rate:</strong> ₹50 / hour</p>
+
+    <h3 style="color: #27ae60; font-size: 24px; margin: 20px 0;">Total Cost: ₹{{ cost }}</h3>
+
+    <form action="{{ url_for('pay', booking_id=booking.id) }}" method="post">
+        <button type="submit" class="btn" style="width: 100%; font-size: 1.1em; padding: 15px;">Pay & End
+            Booking</button>
+    </form>
+
+    <p style="margin-top: 15px;"><a href="{{ url_for('my_bookings') }}" style="color: #7f8c8d;">Cancel & Return</a></p>
+</div>
+{% endblock %}

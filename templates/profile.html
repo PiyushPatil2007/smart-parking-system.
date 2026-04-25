@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Smart Parking - Profile{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 500px; margin: 40px auto;">
+    <h2 style="text-align: center;">My Profile</h2>
+    <p style="text-align: center; color: #7f8c8d;">Manage your account and saved vehicles</p>
+
+    <form action="{{ url_for('profile') }}" method="post" style="margin-top: 30px;">
+        <label>Username (Non-editable)</label>
+        <input type="text" value="{{ user.username }}" disabled style="background-color: #f9f9f9; cursor: not-allowed;">
+
+        <label>Email (Non-editable)</label>
+        <input type="email" value="{{ user.email }}" disabled style="background-color: #f9f9f9; cursor: not-allowed;">
+
+        <label>Default Vehicle Number</label>
+        <input type="text" name="default_vehicle" value="{{ user.default_vehicle or '' }}"
+            placeholder="e.g. MH-12-AB-1234">
+
+        <button type="submit" class="btn" style="width: 100%; margin-top: 20px;">Save Changes</button>
+    </form>
+</div>
+{% endblock %}

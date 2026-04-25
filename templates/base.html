@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Smart Parking{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+  <div class="navbar">
+    <a href="{{ url_for('index') }}" style="font-size: 1.2rem; display: flex; align-items: center; gap: 8px;">
+      <span
+        style="background: var(--accent-green); color: var(--bg-color); padding: 2px 8px; border-radius: 4px; font-weight: 800; font-size: 1.4rem;">P</span>
+      <span style="color: white; font-weight: 700; letter-spacing: 2px;">SmartPark</span>
+    </a>
+    {% if session.get('user_id') %}
+    {% if session.get('role') == 'admin' %}
+    <a href="{{ url_for('admin_dashboard') }}">Admin Tools</a>
+    {% endif %}
+    <a href="{{ url_for('dashboard') }}">Dashboard</a>
+    <a href="{{ url_for('my_bookings') }}">My Bookings</a>
+    <a href="{{ url_for('profile') }}" class="right">Profile</a>
+    <a href="{{ url_for('logout') }}" class="right">Logout</a>
+    {% else %}
+    <a href="{{ url_for('login') }}" class="right">Login</a>
+    <a href="{{ url_for('register') }}" class="right">Register</a>
+    {% endif %}
+  </div>
+
+  <div class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div style="padding: 10px; margin-bottom: 10px; background-color: #fcdbd8; color: #721c24; border-radius: 5px;">{{
+      message }}</div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    {% block content %}
+    {% endblock %}
+  </div>
+
+</body>
+
+</html>

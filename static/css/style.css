@@ -1,0 +1,358 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&display=swap');
+
+:root {
+    --bg-color: #0b0f19;
+    --panel-bg: rgba(20, 24, 36, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --text-primary: #ffffff;
+    --text-secondary: #94a3b8;
+    --accent-neon: #00f0ff;
+    --accent-green: #2ecc71;
+    --accent-red: #ff3366;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Space Grotesk', sans-serif;
+    background-color: var(--bg-color);
+    background-image:
+        radial-gradient(circle at 15% 50%, rgba(0, 240, 255, 0.08), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(46, 204, 113, 0.05), transparent 25%);
+    color: var(--text-primary);
+    min-height: 100vh;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    align-items: center;
+    padding: 15px 40px;
+    background: var(--panel-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--glass-border);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar a {
+    color: var(--text-primary);
+    text-decoration: none;
+    margin-right: 30px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.navbar a:hover {
+    color: var(--accent-neon);
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+}
+
+.navbar a.right {
+    margin-right: 0;
+    margin-left: auto;
+}
+
+.navbar a.right~a.right {
+    margin-left: 30px;
+}
+
+/* Layout */
+.container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.card {
+    background: var(--panel-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* Headings */
+h1,
+h2,
+h3 {
+    margin-top: 0;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+h2 {
+    font-size: 2.2rem;
+    text-align: center;
+    margin-bottom: 30px;
+    background: -webkit-linear-gradient(45deg, var(--text-primary), var(--accent-neon));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Input Fields */
+label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    color: var(--text-secondary);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 12px 15px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--accent-neon);
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+}
+
+input:disabled {
+    background-color: rgba(20, 24, 36, 0.4) !important;
+    color: #7f8c8d;
+}
+
+/* Core Buttons */
+.btn {
+    background: transparent;
+    color: var(--accent-neon);
+    border: 1px solid var(--accent-neon);
+    padding: 12px 24px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    border-radius: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.1);
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+}
+
+.btn:hover {
+    background: var(--accent-neon);
+    color: var(--bg-color);
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    padding: 15px;
+    border-bottom: 2px solid var(--glass-border) !important;
+}
+
+td {
+    padding: 15px;
+    border-bottom: 1px solid var(--glass-border) !important;
+    color: var(--text-primary);
+}
+
+tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* Text Color Utility Classes */
+.text-available {
+    color: var(--accent-green) !important;
+    font-weight: bold !important;
+}
+
+.text-occupied {
+    color: var(--accent-red) !important;
+    font-weight: bold !important;
+}
+
+/* Dashboard Map Layout */
+.dashboard-layout {
+    display: flex;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.map-panel {
+    flex: 3;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 30px;
+    backdrop-filter: blur(10px);
+}
+
+.stats-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.stat-box {
+    background: var(--panel-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 25px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.map-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+/* Grid specific mapping */
+.parking-grid {
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: 20px !important;
+    justify-content: center;
+    align-items: center;
+}
+
+/* The slots */
+.slot {
+    width: 140px !important;
+    height: 60px !important;
+    background: transparent !important;
+    border: 2px solid var(--glass-border) !important;
+    backdrop-filter: blur(5px) !important;
+    border-radius: 12px !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: none !important;
+    text-decoration: none !important;
+    padding: 0px 5px !important;
+}
+
+.slot:hover {
+    transform: scale(1.1) !important;
+    z-index: 10;
+    cursor: pointer;
+}
+
+.slot-available {
+    border-color: var(--accent-green) !important;
+    box-shadow: 0 0 10px rgba(46, 204, 113, 0.2), inset 0 0 15px rgba(46, 204, 113, 0.1) !important;
+}
+
+.slot-available:hover {
+    box-shadow: 0 0 20px rgba(46, 204, 113, 0.5), inset 0 0 20px rgba(46, 204, 113, 0.3) !important;
+}
+
+.slot-occupied {
+    border-color: var(--accent-red) !important;
+    box-shadow: 0 0 10px rgba(255, 51, 102, 0.2), inset 0 0 15px rgba(255, 51, 102, 0.1) !important;
+    opacity: 0.8 !important;
+    cursor: not-allowed;
+}
+
+.slot-occupied:hover {
+    transform: scale(1.0) !important;
+}
+
+.slot h3.slot-label {
+    margin: 0 !important;
+    font-size: 14px !important;
+    color: rgba(255, 255, 255, 0.85) !important;
+    transform: none !important;
+    white-space: nowrap !important;
+    letter-spacing: 3px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+}
+
+.slot p.type {
+    display: none !important;
+}
+
+.btn-white {
+    background-color: var(--accent-green);
+    color: var(--bg-color);
+    font-weight: bold;
+    margin-top: 15px;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    box-shadow: 0 0 15px rgba(46, 204, 113, 0.3);
+    transition: all 0.3s ease;
+}
+
+.btn-white:hover {
+    box-shadow: 0 0 25px rgba(46, 204, 113, 0.6);
+    transform: scale(1.05);
+}
+
+.btn-disabled {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #7f8c8d;
+    cursor: not-allowed;
+    margin-top: 15px;
+    border: 1px solid var(--glass-border);
+    padding: 10px 20px;
+    border-radius: 5px;
+    display: inline-block;
+    text-decoration: none;
+}
+
+a {
+    color: var(--accent-neon);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.timer {
+    color: var(--accent-neon) !important;
+    font-size: 1rem !important;
+    font-weight: bold;
+    text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
+}

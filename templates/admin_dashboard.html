@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Smart Parking - Admin Dashboard{% endblock %}
+
+{% block content %}
+<h2>Admin Dashboard</h2>
+<div class="card" style="margin-bottom: 30px;">
+    <h3>All Slots Status</h3>
+    <table>
+        <tr>
+            <th>Slot No.</th>
+            <th>Status</th>
+            <th>Vehicle Type</th>
+            <th>Action</th>
+        </tr>
+        {% for slot in slots %}
+        <tr>
+            <td>{{ slot.slot_number }}</td>
+            <td
+                style="font-weight: bold; color: {% if slot.status == 'Available' %}var(--accent-green){% else %}var(--accent-red){% endif %};">
+                {{ slot.status }}</td>
+            <td>{{ slot.vehicle_type }}</td>
+            <td>
+                {% if slot.status == 'Occupied' %}
+                <form action="{{ url_for('admin_clear', slot_id=slot.id) }}" method="post" style="display:inline;">
+                    <button type="submit" class="btn"
+                        style="border-color: var(--accent-red); color: var(--accent-red); padding: 5px 10px;">Force
+                        Clear</button>
+                </form>
+                {% else %}
+                -
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<div class="card">
+    <h3>Active Bookings</h3>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>User</th>
+            <th>Slot</th>
+            <th>Vehicle</th>
+            <th>Status</th>
+        </tr>
+        {% for b in bookings if b.status == 'Active' %}
+        <tr>
+            <td>#{{ b.id }}</td>
+            <td>{{ b.username }}</td>
+            <td>{{ b.slot_number }}</td>
+            <td>{{ b.vehicle_number }}</td>
+            <td style="color: var(--accent-green); font-weight: bold;">Active</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="5" style="text-align: center;">No active bookings.</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

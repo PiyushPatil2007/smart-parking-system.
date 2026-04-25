@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Smart Parking - My Bookings{% endblock %}
+
+{% block content %}
+<h2 style="margin-left: 20px;">My Bookings</h2>
+<div class="card">
+    <table>
+        <tr>
+            <th>Booking ID</th>
+            <th>Slot</th>
+            <th>Vehicle No.</th>
+            <th>Status</th>
+            <th>Live Cost</th>
+            <th>Action</th>
+        </tr>
+        {% for booking in bookings %}
+        <tr>
+            <td>#{{ booking.id }}</td>
+            <td>{{ booking.slot_number }}</td>
+            <td>{{ booking.vehicle_number }}</td>
+            {% if booking.status == 'Active' %}
+            <td style="color: var(--accent-green); font-weight: bold;">
+                Active <br>
+                <span class="timer" data-start="{{ booking.booking_time_iso }}">0h 0m 0s</span>
+            </td>
+            <td style="color: var(--accent-neon); font-family: monospace; font-size: 1.25em;" class="live-cost">
+                ₹0.000
+            </td>
+            <td>
+                <a href="{{ url_for('checkout', booking_id=booking.id) }}" class="btn"
+                    style="border-color: var(--accent-red); color: var(--accent-red); padding: 5px 10px;">End &
+                    Checkout</a>
+            </td>
+            {% else %}
+            <td style="color: var(--text-secondary);">Completed</td>
+            <td style="color: var(--text-secondary);">-</td>
+            <td>-</td>
+            {% endif %}
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="6" style="text-align: center;">No bookings found.</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<script>
+    function updateTimers() {
+        document.querySelectorAll('.timer').forEach(el => {
+            let startString = el.getAttribute('data-start');
+            if (!startString) return;
+
+            // Removing Z forces local timezone evaluation mapping to DB local timezone
+            let startTime = new Date(startString.replace('Z', '')).getTime();
+            let now = new Date().getTime();
+            let diff = Math.floor((now - startTime) / 1000);
+
+            if (diff < 0) diff = 0;
+            let h = Math.floor(diff / 3600);
+            let m = Math.floor((diff % 3600) / 60);
+            let s = diff % 60;
+
+            el.innerText = `${h}h ${m}m ${s}s`;
+
+            // Pricing update dynamically
+            let costInRupees = (diff / 3600) * 50;
+            let tr = el.closest('tr');
+            if (tr) {
+                let costTd = tr.querySelector('.live-cost');
+                if (costTd) {
+                    costTd.innerText = `₹${costInRupees.toFixed(4)}`;
+                }
+            }
+        });
+    }
+    setInterval(updateTimers, 1000);
+    updateTimers();
+</script>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Smart Parking - Book Slot{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 400px; margin: 40px auto;">
+    <h2 style="text-align: center;">Book Slot: {{ slot.slot_number }}</h2>
+    <p style="text-align: center;">Vehicle Type: <strong>{{ slot.vehicle_type }}</strong></p>
+
+    <form action="" method="post" style="margin-top: 20px;">
+        <label>Your Vehicle Number</label>
+        <input type="text" name="vehicle_number" placeholder="e.g. MH-12-AB-1234" value="{{ default_veh }}" required>
+
+        <button type="submit" class="btn" style="width: 100%; margin-top: 15px;">Confirm Booking</button>
+    </form>
+    <p style="text-align: center; margin-top: 15px;"><a href="{{ url_for('dashboard') }}">Cancel</a></p>
+</div>
+{% endblock %}
