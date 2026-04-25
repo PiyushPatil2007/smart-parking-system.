@@ -82,4 +82,21 @@
     setInterval(updateTimers, 1000);
     updateTimers();
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('confetti') === '1') {
+            // First burst from left
+            confetti({ particleCount: 80, angle: 60, spread: 70, origin: { x: 0 }, colors: ['#00f0ff', '#2ecc71', '#ff3366', '#fff'] });
+            // Second burst from right
+            setTimeout(() => confetti({ particleCount: 80, angle: 120, spread: 70, origin: { x: 1 }, colors: ['#00f0ff', '#2ecc71', '#ff3366', '#fff'] }), 200);
+            // Center big burst
+            setTimeout(() => confetti({ particleCount: 120, spread: 100, origin: { y: 0.5 }, colors: ['#00f0ff', '#ffffff', '#2ecc71'] }), 450);
+            // Clean the URL so refreshing doesn't retrigger
+            history.replaceState({}, '', window.location.pathname);
+        }
+    });
+</script>
 {% endblock %}

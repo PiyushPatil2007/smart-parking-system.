@@ -38,20 +38,24 @@
     <div class="stats-panel">
         <div class="stat-box">
             <h4 style="margin: 0 0 10px 0; color: var(--text-secondary);">Total Parking Slots</h4>
-            <h1 style="margin: 0; font-size: 2.5rem; font-weight: 300;">{{ slots|length }}</h1>
+            <h1 style="margin: 0; font-size: 2.5rem; font-weight: 300;">
+                <span class="counter" data-target="{{ slots|length }}">0</span>
+            </h1>
         </div>
 
         <div class="stat-box" style="background: linear-gradient(135deg, rgba(46,204,113,0.1), transparent);">
             <h4 style="margin: 0 0 10px 0; color: var(--accent-green);">Available Now</h4>
             <h1 style="margin: 0; font-size: 2.5rem; font-weight: 300; color: white;">
-                {{ slots | selectattr("status", "equalto", "Available") | list | length }}
+                <span class="counter"
+                    data-target="{{ slots | selectattr('status', 'equalto', 'Available') | list | length }}">0</span>
             </h1>
         </div>
 
         <div class="stat-box" style="background: linear-gradient(135deg, rgba(231,76,60,0.1), transparent);">
             <h4 style="margin: 0 0 10px 0; color: var(--accent-red);">Occupied Now</h4>
             <h1 style="margin: 0; font-size: 2.5rem; font-weight: 300; color: white;">
-                {{ slots | selectattr("status", "equalto", "Occupied") | list | length }}
+                <span class="counter"
+                    data-target="{{ slots | selectattr('status', 'equalto', 'Occupied') | list | length }}">0</span>
             </h1>
         </div>
 
@@ -61,4 +65,24 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll('.counter').forEach(el => {
+            const target = parseInt(el.getAttribute('data-target'));
+            const duration = 1200;
+            const step = target / (duration / 16);
+            let current = 0;
+            const timer = setInterval(() => {
+                current += step;
+                if (current >= target) {
+                    el.innerText = target;
+                    clearInterval(timer);
+                } else {
+                    el.innerText = Math.floor(current);
+                }
+            }, 16);
+        });
+    });
+</script>
 {% endblock %}

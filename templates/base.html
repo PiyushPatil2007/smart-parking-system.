@@ -12,6 +12,9 @@
 
 <body>
   <div id="particles-js"></div>
+  <div id="page-loader">
+    <div class="spinner"></div>
+  </div>
 
   <div class="navbar">
     <a href="{{ url_for('index') }}" style="font-size: 1.2rem; display: flex; align-items: center; gap: 8px;">
@@ -68,6 +71,25 @@
     toggleBtn.addEventListener('click', () => {
       document.body.classList.toggle('light-theme');
       toggleBtn.innerText = document.body.classList.contains('light-theme') ? '🌙' : '☀️';
+    });
+
+    // Hide loader once page is ready
+    window.addEventListener('load', () => {
+      document.getElementById('page-loader').style.opacity = '0';
+      setTimeout(() => document.getElementById('page-loader').style.display = 'none', 400);
+    });
+
+    // Show loader on navigation
+    document.addEventListener('click', e => {
+      const link = e.target.closest('a[href]');
+      if (link && !link.href.startsWith('javascript') && !link.target) {
+        document.getElementById('page-loader').style.display = 'flex';
+        document.getElementById('page-loader').style.opacity = '1';
+      }
+    });
+    document.addEventListener('submit', () => {
+      document.getElementById('page-loader').style.display = 'flex';
+      document.getElementById('page-loader').style.opacity = '1';
     });
 
     if (typeof particlesJS !== 'undefined') {

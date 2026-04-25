@@ -239,7 +239,7 @@ def pay(booking_id):
         except Exception as e:
             mysql.connection.rollback()
             flash('Error checking out.', 'danger')
-    return redirect(url_for('my_bookings'))
+    return redirect(url_for('my_bookings', confetti=1))
 
 @app.route('/profile', methods=['GET', 'POST'])
 @login_required
