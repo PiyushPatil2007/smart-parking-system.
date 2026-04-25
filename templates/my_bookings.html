@@ -53,9 +53,10 @@
             if (!startString) return;
 
             // Removing Z forces local timezone evaluation mapping to DB local timezone
-            let startTime = new Date(startString + 'Z').getTime();
+            let startTime = parseFloat(startString);
             let now = new Date().getTime();
             let diff = Math.floor((now - startTime) / 1000);
+
 
             if (diff < 0) diff = 0;
             let h = Math.floor(diff / 3600);
