@@ -141,12 +141,15 @@ def my_bookings():
     cur.execute(query, [session['user_id']])
     bookings = cur.fetchall()
     
-    from datetime import timezone, timedelta
-    ist_tz = timezone(timedelta(hours=5, minutes=30))
+    from datetime import datetime, timezone
     for b in bookings:
         if b['booking_time']:
             b['booking_time_iso'] = b['booking_time'].isoformat()
-            b['booking_time_epoch'] = b['booking_time'].replace(tzinfo=ist_tz).timestamp() * 1000
+            
+            # Pure mathematical offset calculation (Server UTC - Database UTC)
+            now_utc = datetime.now(timezone.utc).replace(tzinfo=None)
+            elapsed = (now_utc - b['booking_time']).total_seconds()
+            b['elapsed'] = int(elapsed) if elapsed > 0 else 0
 
     cur.close()
     return render_template('my_bookings.html', bookings=bookings)
