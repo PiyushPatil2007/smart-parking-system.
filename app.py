@@ -145,14 +145,57 @@ def my_bookings():
     for b in bookings:
         if b['booking_time']:
             b['booking_time_iso'] = b['booking_time'].isoformat()
-            
-            # Pure mathematical offset calculation (Server UTC - Database UTC)
             now_utc = datetime.now(timezone.utc).replace(tzinfo=None)
             elapsed = (now_utc - b['booking_time']).total_seconds()
             b['elapsed'] = int(elapsed) if elapsed > 0 else 0
             
     cur.close()
     return render_template('my_bookings.html', bookings=bookings)
+
+@app.route('/receipt/<int:booking_id>')
+@login_required
+def download_receipt(booking_id):
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT b.*, u.username, ps.slot_number FROM bookings b JOIN users u ON b.user_id = u.id JOIN parking_slots ps ON b.slot_id = ps.id WHERE b.id = %s AND b.user_id = %s AND b.status = 'Completed'", (booking_id, session['user_id']))
+    booking = cur.fetchone()
+    cur.close()
+    
+    if not booking:
+        flash('Receipt not available for this booking.', 'danger')
+        return redirect(url_for('my_bookings'))
+        
+    from io import BytesIO
+    from reportlab.pdfgen import canvas
+    from reportlab.lib.pagesizes import letter
+    from flask import send_file
+    
+    buffer = BytesIO()
+    p = canvas.Canvas(buffer, pagesize=letter)
+    
+    # Draw PDF
+    p.setFont("Helvetica-Bold", 24)
+    p.drawString(200, 750, "SmartPark - Official Tax Invoice")
+    
+    p.setFont("Helvetica", 12)
+    p.drawString(50, 700, f"Booking ID: #{booking['id']}")
+    p.drawString(50, 680, f"Customer Name: {booking['username']}")
+    p.drawString(50, 660, f"Vehicle Reg. Number: {booking['vehicle_number']}")
+    p.drawString(50, 640, f"Parking Slot: {booking['slot_number']}")
+    
+    p.drawString(50, 600, f"Arrival Time: {booking['booking_time']}")
+    p.drawString(50, 580, f"Departure Time: {booking['exit_time']}")
+    
+    p.setFont("Helvetica-Bold", 14)
+    p.drawString(50, 530, f"Total Amount Charged: INR {booking['total_cost']}")
+    
+    p.setFont("Helvetica-Oblique", 10)
+    p.drawString(50, 500, "Thank you for securely parking with SmartPark!")
+    
+    p.showPage()
+    p.save()
+    
+    buffer.seek(0)
+    return send_file(buffer, as_attachment=True, download_name=f'SmartPark_Receipt_{booking_id}.pdf', mimetype='application/pdf')
 
 @app.route('/checkout/<int:booking_id>')
 @login_required
