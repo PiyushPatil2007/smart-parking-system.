@@ -22,7 +22,7 @@
             {% if booking.status == 'Active' %}
             <td style="color: var(--accent-green); font-weight: bold;">
                 Active <br>
-                <span class="timer" data-start="{{ booking.booking_time_epoch }}">0h 0m 0s</span>
+                <span class="timer" data-elapsed="{{ booking.elapsed }}">0h 0m 0s</span>
             </td>
             <td style="color: var(--accent-neon); font-family: monospace; font-size: 1.25em;" class="live-cost">
                 ₹0.000
@@ -52,11 +52,8 @@
             let startString = el.getAttribute('data-start');
             if (!startString) return;
 
-            // Removing Z forces local timezone evaluation mapping to DB local timezone
-            let startTime = parseFloat(startString);
-            let now = new Date().getTime();
-            let diff = Math.floor((now - startTime) / 1000);
-
+            let diff = parseFloat(el.getAttribute('data-elapsed'));
+            el.setAttribute('data-elapsed', diff + 1);
 
             if (diff < 0) diff = 0;
             let h = Math.floor(diff / 3600);
