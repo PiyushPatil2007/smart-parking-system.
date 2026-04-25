@@ -15,12 +15,12 @@
         </tr>
         {% for slot in slots %}
         <tr>
-            <td>{{ slot.slot_number }}</td>
-            <td
+            <td data-label="Slot No.">{{ slot.slot_number }}</td>
+            <td data-label="Status"
                 style="font-weight: bold; color: {% if slot.status == 'Available' %}var(--accent-green){% else %}var(--accent-red){% endif %};">
                 {{ slot.status }}</td>
-            <td>{{ slot.vehicle_type }}</td>
-            <td>
+            <td data-label="Vehicle Type">{{ slot.vehicle_type }}</td>
+            <td data-label="Action">
                 {% if slot.status == 'Occupied' %}
                 <form action="{{ url_for('admin_clear', slot_id=slot.id) }}" method="post" style="display:inline;">
                     <button type="submit" class="btn"
@@ -48,11 +48,11 @@
         </tr>
         {% for b in bookings if b.status == 'Active' %}
         <tr>
-            <td>#{{ b.id }}</td>
-            <td>{{ b.username }}</td>
-            <td>{{ b.slot_number }}</td>
-            <td>{{ b.vehicle_number }}</td>
-            <td style="color: var(--accent-green); font-weight: bold;">Active</td>
+            <td data-label="ID">#{{ b.id }}</td>
+            <td data-label="User">{{ b.username }}</td>
+            <td data-label="Slot">{{ b.slot_number }}</td>
+            <td data-label="Vehicle">{{ b.vehicle_number }}</td>
+            <td data-label="Status" style="color: var(--accent-green); font-weight: bold;">Active</td>
         </tr>
         {% else %}
         <tr>

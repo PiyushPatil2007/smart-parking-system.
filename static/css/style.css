@@ -355,22 +355,23 @@ a:hover {
     font-size: 1rem !important;
     font-weight: bold;
     text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
+}
 
-    /* Mobile Responsiveness Rules */
+/* Mobile Responsiveness Rules */
 @media screen and (max-width: 768px) {
     .navbar {
         flex-direction: column;
         padding: 15px;
         gap: 10px;
     }
-    
+
     .navbar a {
         margin: 5px 0 !important;
         text-align: center;
         width: 100%;
         display: block;
     }
-    
+
     .navbar a:first-child {
         justify-content: center;
         margin-bottom: 15px !important;
@@ -391,21 +392,64 @@ a:hover {
         gap: 20px;
     }
 
-    table {
+    /* Seamless Mobile Table Cards */
+    table,
+    thead,
+    tbody,
+    th,
+    td,
+    tr {
         display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-        border-radius: 8px;
     }
-    
+
+    th {
+        display: none;
+    }
+
+    tr {
+        margin-bottom: 20px;
+        border: 1px solid var(--glass-border);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.02);
+        padding: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    td {
+        border-bottom: none !important;
+        position: relative;
+        padding: 10px 10px 10px 40% !important;
+        text-align: right;
+        min-height: 25px;
+    }
+
+    td:not(:last-child) {
+        border-bottom: 1px dashed rgba(255, 255, 255, 0.1) !important;
+    }
+
+    td:before {
+        position: absolute;
+        top: 10px;
+        left: 0;
+        width: 35%;
+        padding-right: 10px;
+        white-space: nowrap;
+        text-align: left;
+        font-weight: 600;
+        color: var(--text-secondary);
+        content: attr(data-label);
+        font-size: 0.85em;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
     h2 {
         font-size: 1.6rem;
     }
-    
+
+    /* Shrink specific dashboard visual grid layout if any */
     .slot {
         width: 100px !important;
         height: 50px !important;
     }
-}
-
 }
