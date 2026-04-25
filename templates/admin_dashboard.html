@@ -56,6 +56,43 @@
         });
     });
 </script>
+
+{% set total = slots | length %}
+{% set occupied = slots | selectattr("status", "equalto", "Occupied") | list | length %}
+{% set pct = ((occupied / total) * 100) | int if total > 0 else 0 %}
+
+<div class="card" style="margin-bottom: 30px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <h3 style="margin: 0;">🚗 Garage Capacity</h3>
+        <span
+            style="font-size: 1.4rem; font-weight: 700; color: {% if pct >= 90 %}var(--accent-red){% elif pct >= 60 %}#f59e0b{% else %}var(--accent-green){% endif %};">
+            {{ pct }}% Full
+        </span>
+    </div>
+    <div
+        style="background: rgba(255,255,255,0.08); border-radius: 50px; height: 18px; overflow: hidden; border: 1px solid var(--glass-border);">
+        <div id="capacity-bar" data-pct="{{ pct }}" style="
+            height: 100%;
+            width: 0%;
+            border-radius: 50px;
+            background: {% if pct >= 90 %}linear-gradient(90deg, #ff3366, #ff6b6b){% elif pct >= 60 %}linear-gradient(90deg, #f59e0b, #fbbf24){% else %}linear-gradient(90deg, #2ecc71, #00f0ff){% endif %};
+            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 12px rgba(0, 240, 255, 0.5);
+        "></div>
+    </div>
+    <div
+        style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.85em; color: var(--text-secondary);">
+        <span>{{ occupied }} Occupied</span>
+        <span>{{ total - occupied }} Available / {{ total }} Total</span>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const bar = document.getElementById('capacity-bar');
+        if (bar) setTimeout(() => bar.style.width = bar.getAttribute('data-pct') + '%', 100);
+    });
+</script>
+
 <div class="card" style="margin-bottom: 30px;">
     <h3>All Slots Status</h3>
     <table>

@@ -6,9 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}Smart Parking{% endblock %}</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 </head>
 
 <body>
+  <div id="particles-js"></div>
 
   <div class="navbar">
     <a href="{{ url_for('index') }}" style="font-size: 1.2rem; display: flex; align-items: center; gap: 8px;">
@@ -28,15 +31,31 @@
     <a href="{{ url_for('login') }}" class="right">Login</a>
     <a href="{{ url_for('register') }}" class="right">Register</a>
     {% endif %}
+    <button id="theme-toggle" class="btn right"
+      style="padding: 5px 10px; font-size: 1.1em; background: transparent; border: 1px solid var(--glass-border); color: var(--text-primary); margin-left: 10px; cursor: pointer; transition: all 0.3s ease;">☀️</button>
   </div>
 
   <div class="container">
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
-    {% for category, message in messages %}
-    <div style="padding: 10px; margin-bottom: 10px; background-color: #fcdbd8; color: #721c24; border-radius: 5px;">{{
-      message }}</div>
-    {% endfor %}
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        {% for category, message in messages %}
+        Swal.fire({
+          title: "{{ 'Success!' if category == 'success' else 'Attention!' }}",
+          text: "{{ message }}",
+          icon: "{{ category }}",
+          background: "var(--bg-dark)",
+          color: "var(--text-primary)",
+          confirmButtonColor: "var(--accent-neon)",
+          timer: 3000,
+          showConfirmButton: false,
+          toast: true,
+          position: 'top-end'
+        });
+        {% endfor %}
+      });
+    </script>
     {% endif %}
     {% endwith %}
 
@@ -44,6 +63,30 @@
     {% endblock %}
   </div>
 
+  <script>
+    const toggleBtn = document.getElementById('theme-toggle');
+    toggleBtn.addEventListener('click', () => {
+      document.body.classList.toggle('light-theme');
+      toggleBtn.innerText = document.body.classList.contains('light-theme') ? '🌙' : '☀️';
+    });
+
+    if (typeof particlesJS !== 'undefined') {
+      particlesJS('particles-js', {
+        "particles": {
+          "number": { "value": 50 },
+          "color": { "value": "#00f0ff" },
+          "shape": { "type": "circle" },
+          "opacity": { "value": 0.3 },
+          "size": { "value": 2 },
+          "line_linked": { "enable": true, "distance": 150, "color": "#00f0ff", "opacity": 0.2, "width": 1 },
+          "move": { "enable": true, "speed": 1.5 }
+        },
+        "interactivity": {
+          "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" } }
+        }
+      });
+    }
+  </script>
 </body>
 
 </html>

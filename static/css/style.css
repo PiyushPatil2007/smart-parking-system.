@@ -21,6 +21,75 @@ body {
         radial-gradient(circle at 85% 30%, rgba(46, 204, 113, 0.05), transparent 25%);
     color: var(--text-primary);
     min-height: 100vh;
+    transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+/* Particles.js full-page canvas */
+#particles-js {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Everything sits above the particle layer */
+.navbar,
+.container,
+.card,
+.stat-box,
+.dashboard-layout {
+    position: relative;
+    z-index: 1;
+}
+
+/* ===================== Light Theme ===================== */
+body.light-theme {
+    --bg-color: #f0f4f8;
+    --panel-bg: rgba(255, 255, 255, 0.85);
+    --glass-border: rgba(0, 0, 0, 0.1);
+    --text-primary: #1a202c;
+    --text-secondary: #4a5568;
+    --accent-neon: #0077ff;
+    --accent-green: #16a34a;
+    --accent-red: #dc2626;
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+}
+
+/* ===================== Slot Animations ===================== */
+@keyframes pulseAvailable {
+
+    0%,
+    100% {
+        box-shadow: 0 0 6px rgba(46, 204, 113, 0.4);
+    }
+
+    50% {
+        box-shadow: 0 0 18px rgba(46, 204, 113, 0.9);
+    }
+}
+
+@keyframes pulseOccupied {
+
+    0%,
+    100% {
+        box-shadow: 0 0 6px rgba(255, 51, 102, 0.3);
+    }
+
+    50% {
+        box-shadow: 0 0 16px rgba(255, 51, 102, 0.8);
+    }
+}
+
+.slot-available {
+    animation: pulseAvailable 2.5s ease-in-out infinite;
+}
+
+.slot-occupied {
+    animation: pulseOccupied 2s ease-in-out infinite;
 }
 
 /* Navbar */
